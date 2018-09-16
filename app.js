@@ -19,7 +19,7 @@ board.on("ready", function() {
 
 
   proximity.on("change", function() {
-      distanciaAtual = this.cm * 0.01
+      distanciaAtual = this.cm;
   });
 });
 // view engine setup
@@ -67,10 +67,12 @@ app.post('/', function (req, res) {
   if(req.body.dimensions){
       total= req.body.dimensions.height * req.body.dimensions.width * req.body.dimensions.length
 
-      preenchido = (req.body.dimensions.height - distanciaAtual ) * req.body.dimensions.width * req.body.dimensions.length
+      var aux = distanciaAtual - req.body.dimensions.height;
+      aux = aux * (-1)
+      preenchido = aux * req.body.dimensions.width * req.body.dimensions.length;
 
       porcentagem = (preenchido * 100) / total;
-      res.status(200).send({'porcentagem':porcentagem, 'distancia at' : distanciaAtual, 'preenchido' : preenchido, 'total' :total });
+      res.status(200).send({'porcentagem':porcentagem, 'distancia at' : distanciaAtual, 'preenchido' : preenchido, 'total' :total, 'aux':aux });
 
   }else{
     res.status(500).send('erro');
